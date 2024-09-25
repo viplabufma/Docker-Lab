@@ -1,0 +1,14 @@
+[
+  {
+    "user": "user1",
+    "password": "userP@ssw0rd1",
+    "device_id": "0",
+    "framework": "tensorflow"
+  },
+  {
+    "user": "user2",
+    "password": "userP@ssw0rd2",
+    "device_id": "1",
+    "framework": "pytorch"
+  }
+]

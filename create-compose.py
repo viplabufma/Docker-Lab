@@ -1,4 +1,5 @@
 import os
+import json
 
 def generate_docker_compose(services, filename='docker-compose.yaml'):
     header = '''version: '3.8'
@@ -54,24 +55,23 @@ if __name__ == "__main__":
     # Get the base path for the home directory of the current user
     current_user_home = os.path.expanduser("~")
 
-    # Define users, passwords, device_ids, and the framework for each user
-    users = ['user']
-    passwords = ['userP@ssw0r']
-    device_ids = ['0'] 
-    frameworks = ['tensorflow']  
+    # Load user data from users.json
+    with open('users.json', 'r') as f:
+        user_data = json.load(f)
 
     services = []
 
-    # Create a service for each user with their respective framework and device
-    for i, user in enumerate(users):
+    # Create a service for each user defined in the JSON file
+    for i, user_info in enumerate(user_data):
         service_params = {
-            'user': user,
-            'password': passwords[i],
-            'device_id': device_ids[i],
-            'framework': frameworks[i],
+            'user': user_info['user'],
+            'password': user_info['password'],
+            'device_id': user_info['device_id'],
+            'framework': user_info['framework'],
             'port': 2020 + i  # Increment port number for each user
         }
         service = create_service(service_params, current_user_home)
         services.append(service)
 
+    # Generate the docker-compose.yaml file
     generate_docker_compose(services)
