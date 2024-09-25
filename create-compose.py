@@ -1,6 +1,11 @@
 import os
 import json
 
+from dotenv import load_dotenv  # Importa a função para carregar o .env
+
+# Carregar variáveis do arquivo .env
+load_dotenv()
+
 def generate_docker_compose(services, filename='docker-compose.yaml'):
     header = '''version: '3.8'
 
@@ -41,12 +46,15 @@ def create_service(service_param, base_home_path):
           - driver: nvidia
             device_ids: ['{DEVICE_ID}']
             capabilities: [gpu]
+        limits:
+          memory: {MEMORY_LIMIT}
     '''.format(USER=service_param['user'],
                DEVICE_ID=service_param['device_id'],
                FRAMEWORK=service_param['framework'],
                PASSWORD=service_param['password'],
                PORT=service_param['port'],
-               USER_HOME=user_home)
+               USER_HOME=user_home,
+               MEMORY_LIMIT = os.getenv('MEMORY_LIMIT', '4g'))
     
     return service
 
