@@ -17,10 +17,50 @@ Antes de utilizar o Docker-Lab, certifique-se de que sua máquina atende aos seg
 
 ## Instalação
 
-Clone o repositório:
+### 1. Clonando o repositório
+
+Primeiro, clone o repositório para sua máquina local:
 ```
 git clone https://github.com/viplabufma/Docker-Lab
 cd Docker-Lab
+```
+
+### 2. Instalação de dependências
+O projeto utiliza algumas dependências Python para automatizar a criação do arquivo docker-compose.yaml. Para instalar essas dependências, utilize o comando abaixo:
+
+```
+pip install -r requirements.txt
+```
+
+### 3. Configuração
+
+#### 3.1. Arquivo de ambiente
+Altere o arquivo .env na raiz do projeto com as seguintes configurações:
+
+```
+MEMORY_LIMIT=4g
+```
+
+Você pode ajustar o limite de memória de acordo com a capacidade do seu sistema.
+
+#### 3.2. Configurando usuários
+As informações dos usuários e seus ambientes são definidas em um arquivo users.json. Exemplo de estrutura:
+
+```json
+[
+  {
+    "user": "usuario1",
+    "password": "senhaSegura",
+    "device_id": "0",
+    "framework": "tensorflow"
+  },
+  {
+    "user": "usuario2",
+    "password": "outraSenhaSegura",
+    "device_id": "1",
+    "framework": "pytorch"
+  }
+]
 ```
 
 ## Personalização
