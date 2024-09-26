@@ -39,6 +39,7 @@ def create_service(service_param, base_home_path):
     volumes:
       - /home/{USER}:/home/{USER}
       - /backup:/backup
+    shm_size: {MEMORY_LIMIT}
     deploy:
       resources:
         reservations:
