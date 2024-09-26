@@ -13,7 +13,7 @@ Antes de utilizar o Docker-Lab, certifique-se de que sua máquina atende aos seg
 
 - Docker instalado
 - NVIDIA Drivers para uso de GPUs
-- NVIDIA Container Toolkit instalado para acesso a GPUs
+- [NVIDIA Container Toolkit instalado para acesso a GPUs](./docs/container-toolkit.md)
 
 ## Instalação
 
