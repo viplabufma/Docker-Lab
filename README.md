@@ -11,7 +11,7 @@ Bem-vindo ao *Docker-Lab!* Este repositório contém imagens e utilitários para
 ## Requisitos
 Antes de utilizar o Docker-Lab, certifique-se de que sua máquina atende aos seguintes requisitos:
 
-- NVIDIA Drivers para uso de GPUs
+- [NVIDIA Drivers para uso de GPUs](./docs/nvidia-driver.md)
 - [Docker instalado](./docs/docker-install.md)
 - [NVIDIA Container Toolkit instalado para acesso a GPUs](./docs/container-toolkit.md)
 
