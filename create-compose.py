@@ -37,7 +37,7 @@ def create_service(service_param, base_home_path):
     ports:
       - {PORT}:22
     volumes:
-      - /home/{USER}:/home/{USER}
+      - {USER_HOME}:/home/{USER}
       - /backup:/backup
     shm_size: {MEMORY_LIMIT}
     deploy:
@@ -62,7 +62,7 @@ def create_service(service_param, base_home_path):
 
 if __name__ == "__main__":
     # Get the base path for the home directory of the current user
-    current_user_home = os.path.expanduser("~")
+    current_user_home = os.getenv('ENV_PATH', os.path.expanduser("~"))
 
     # Load user data from users.json
     with open('users.json', 'r') as f:
