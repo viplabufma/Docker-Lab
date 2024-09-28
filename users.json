@@ -1,14 +1,16 @@
 [
   {
-    "user": "durand",
-    "password": "durandP@ssw0rd",
+    "user": "user1",
+    "password": "userP@ssw0rd",
     "device_id": "0",
-    "env": "pytorch"
+    "env": "tensorflow",
+    "ssh-port": 2020
   },
   {
-    "user": "durand",
-    "password": "durandP@ssw0rd",
+    "user": "user2",
+    "password": "userP@ssw0rd",
     "device_id": "1",
-    "env": "pytorch"
+    "env": "pytorch",
+    "ssh-port": 2021
   }
 ]
