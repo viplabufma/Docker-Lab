@@ -1,86 +1,29 @@
 import os
 import json
 
-from dotenv import load_dotenv  # Importa a função para carregar o .env
 
-# Carregar variáveis do arquivo .env
+from utils import generate_docker_compose, create_services, load_users_data, create_and_check_path, write_docker_compose
+
+from dotenv import load_dotenv
+
 load_dotenv()
-
-def generate_docker_compose(services, filename='docker-compose.yaml'):
-    header = '''version: '3.8'
-
-services:
-    '''
-
-    with open(filename, 'w') as file:
-        file.write(header)
-
-        for s in services:
-            file.write(s)
-
-
-def create_service(service_param, base_home_path):
-    # Create the home directory for the user if it doesn't exist
-    user_home = os.path.join(base_home_path,'volumes', service_param['user'])
-    if not os.path.exists(user_home):
-        os.makedirs(user_home)
-    
-    service = '''
-  {USER}-{ENV}-gpu-{DEVICE_ID}:
-    build:
-      context: ./envs/{ENV}
-      dockerfile: Dockerfile
-      args:
-        USER_NAME: {USER}  # Passando o argumento USER_NAME
-        PASSWORD: {PASSWORD}  # Passando o argumento PASSWORD
-    tty: true
-    ports:
-      - {PORT}:22
-    volumes:
-      - {USER_HOME}:/home/{USER}
-      - /backup:/backup
-    shm_size: {MEMORY_LIMIT}
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            device_ids: ['{DEVICE_ID}']
-            capabilities: [gpu]
-        limits:
-          memory: {MEMORY_LIMIT}
-    '''.format(USER=service_param['user'],
-               DEVICE_ID=service_param['device_id'],
-               ENV=service_param['env'],
-               PASSWORD=service_param['password'],
-               PORT=service_param['port'],
-               USER_HOME=user_home,
-               MEMORY_LIMIT = os.getenv('MEMORY_LIMIT', '4g'))
-    
-    return service
 
 
 if __name__ == "__main__":
     # Get the base path for the home directory of the current user
-    current_user_home = os.getenv('ENV_PATH', os.path.expanduser("~"))
+    base_home_path = os.getenv('ENV_PATH', os.path.expanduser("~"))
 
     # Load user data from users.json
-    with open('users.json', 'r') as f:
-        user_data = json.load(f)
+    user_data = load_users_data()
 
-    services = []
+    # Check users permission in volume
+    create_and_check_path(user_data, base_home_path)
 
-    # Create a service for each user defined in the JSON file
-    for i, user_info in enumerate(user_data):
-        service_params = {
-            'user': user_info['user'],
-            'password': user_info['password'],
-            'device_id': user_info['device_id'],
-            'env': user_info['env'],
-            'port': user_info['ssh-port']
-        }
-        service = create_service(service_params, current_user_home)
-        services.append(service)
+    # Create services of compose
+    services = create_services(user_data, base_home_path)
 
-    # Generate the docker-compose.yaml file
-    generate_docker_compose(services)
+    # Generate the docker-compose string
+    docker_compose = generate_docker_compose(services)
+
+    # Write the docker-compose.yaml file
+    write_docker_compose(docker_compose)
