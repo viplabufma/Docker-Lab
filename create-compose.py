@@ -26,9 +26,9 @@ def create_service(service_param, base_home_path):
         os.makedirs(user_home)
     
     service = '''
-  {USER}-{FRAMEWORK}-gpu-{DEVICE_ID}:
+  {USER}-{ENV}-gpu-{DEVICE_ID}:
     build:
-      context: ./{FRAMEWORK}
+      context: ./envs/{ENV}
       dockerfile: Dockerfile
       args:
         USER_NAME: {USER}  # Passando o argumento USER_NAME
@@ -51,7 +51,7 @@ def create_service(service_param, base_home_path):
           memory: {MEMORY_LIMIT}
     '''.format(USER=service_param['user'],
                DEVICE_ID=service_param['device_id'],
-               FRAMEWORK=service_param['framework'],
+               ENV=service_param['env'],
                PASSWORD=service_param['password'],
                PORT=service_param['port'],
                USER_HOME=user_home,
@@ -76,7 +76,7 @@ if __name__ == "__main__":
             'user': user_info['user'],
             'password': user_info['password'],
             'device_id': user_info['device_id'],
-            'framework': user_info['framework'],
+            'env': user_info['env'],
             'port': 2020 + i  # Increment port number for each user
         }
         service = create_service(service_params, current_user_home)

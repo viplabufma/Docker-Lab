@@ -1,14 +1,14 @@
 [
   {
-    "user": "user1",
-    "password": "userP@ssw0rd1",
+    "user": "durand",
+    "password": "durandP@ssw0rd",
     "device_id": "0",
-    "framework": "tensorflow"
+    "env": "pytorch"
   },
   {
-    "user": "user2",
-    "password": "userP@ssw0rd2",
+    "user": "durand",
+    "password": "durandP@ssw0rd",
     "device_id": "1",
-    "framework": "pytorch"
+    "env": "pytorch"
   }
 ]
