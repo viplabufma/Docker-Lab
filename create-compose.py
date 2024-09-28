@@ -77,7 +77,7 @@ if __name__ == "__main__":
             'password': user_info['password'],
             'device_id': user_info['device_id'],
             'env': user_info['env'],
-            'port': 2020 + i  # Increment port number for each user
+            'port': user_info['ssh-port']
         }
         service = create_service(service_params, current_user_home)
         services.append(service)
