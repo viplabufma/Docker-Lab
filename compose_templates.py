@@ -26,4 +26,5 @@ compose_service = '''
             capabilities: [gpu]
         limits:
           memory: {MEMORY_LIMIT}
+          cpus: {CPU_LIMIT}  # Limite de CPU adicionado aqui
 ''';

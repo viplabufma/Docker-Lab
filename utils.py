@@ -40,7 +40,8 @@ def create_service(service_param, base_home_path):
                 PASSWORD=service_param['password'],
                 PORT=service_param['port'],
                 USER_HOME=user_home,
-                MEMORY_LIMIT = os.getenv('MEMORY_LIMIT', '4g'))
+                MEMORY_LIMIT = os.getenv('MEMORY_LIMIT', '4g'),
+                CPU_LIMIT = os.getenv('CPU_LIMIT', '6.0'))
     
     return service
 
