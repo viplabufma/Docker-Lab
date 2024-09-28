@@ -37,7 +37,7 @@ def create_service(service_param, base_home_path):
     ports:
       - {PORT}:22
     volumes:
-      - /home/{USER}:/home/{USER}
+      - {USER_HOME}:/home/{USER}
       - /backup:/backup
     shm_size: {MEMORY_LIMIT}
     deploy:
