@@ -30,8 +30,12 @@ EXPOSE 22
 # Definir o diretório de trabalho
 WORKDIR /home/${USER_NAME} 
 
+# Copia o script de entrada
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Definir o usuário padrão para o container
 USER ${USER_NAME}
 
-# Comando para iniciar o SSH e garantir a geração de chaves de host
-CMD ["/bin/bash", "-c", "mkdir -p /var/run/sshd && /usr/sbin/sshd -D"]
+# Define o script como ponto de entrada
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
