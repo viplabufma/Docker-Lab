@@ -28,7 +28,7 @@ def create_service(service_param, base_home_path):
     service = '''
   {USER}-{ENV}-gpu-{DEVICE_ID}:
     build:
-      context: ./{ENV}
+      context: ./envs/{ENV}
       dockerfile: Dockerfile
       args:
         USER_NAME: {USER}  # Passando o argumento USER_NAME
