@@ -52,13 +52,13 @@ As informações dos usuários e seus ambientes são definidas em um arquivo use
     "user": "usuario1",
     "password": "senhaSegura",
     "device_id": "0",
-    "framework": "tensorflow"
+    "env": "tensorflow"
   },
   {
     "user": "usuario2",
     "password": "outraSenhaSegura",
     "device_id": "1",
-    "framework": "pytorch"
+    "env": "pytorch"
   }
 ]
 ```
