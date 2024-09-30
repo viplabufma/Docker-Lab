@@ -19,6 +19,9 @@ def get_user_path_home(service_param, base_home_path):
 
 
 def create_and_check_path(users_data, base_home_path):
+    if not os.path.exists(base_home_path):
+        os.makedirs(base_home_path)
+        
     if os.access(base_home_path, os.X_OK) and os.access(base_home_path, os.W_OK) and os.access(base_home_path, os.R_OK):
         for ud in users_data:
             service_param = parse_service_params(ud)
