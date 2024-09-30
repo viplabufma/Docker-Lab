@@ -1,4 +1,9 @@
 # Docker-Lab
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
+![Static Badge](https://img.shields.io/badge/version-1.0-blue)
+![Static Badge](https://img.shields.io/badge/tests-passed-green)
 
 Bem-vindo ao *Docker-Lab!* Este repositório contém imagens e utilitários para criar e gerenciar ambientes de desenvolvimento para deep learning, automatizando a configuração de um Docker Compose personalizado para cada usuário do laboratório. O objetivo do projeto é fornecer ambientes dockerizados isolados, com acesso controlado às GPUs da máquina host, sem impactar as configurações de outros usuários ou os recursos compartilhados.
 
