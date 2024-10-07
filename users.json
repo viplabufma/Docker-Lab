@@ -1,0 +1,16 @@
+[
+  {
+    "user": "user1",
+    "password": "userP@ssw0rd",
+    "device_id": "0",
+    "env": "tensorflow",
+    "ssh-port": 2020
+  },
+  {
+    "user": "user2",
+    "password": "userP@ssw0rd",
+    "device_id": "1",
+    "env": "pytorch",
+    "ssh-port": 2021
+  }
+]
