@@ -92,3 +92,11 @@ def check_ports(users_data):
             check_passed = False
             raise PermissionError("the {PORT} port was requested by more than one user".format(PORT = port))
     return check_passed
+
+def check_envs(users_data):
+    available_envs = os.listdir(path='./envs') 
+
+    for u in users_data:
+        env = u["env"]
+        if not env in available_envs:
+            raise PermissionError("The \"{ENV}\" environment is not available in the ./envs path".format(ENV = env))
