@@ -22,6 +22,9 @@ if __name__ == "__main__":
     # Checks if there is more than one port per environment
     check_ports(user_data)
 
+    # Check if the environment is available in the ./envs path
+    check_envs(user_data)
+
     # Create services of compose
     services = create_services(user_data, base_home_path)
 
