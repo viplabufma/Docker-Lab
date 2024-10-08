@@ -79,3 +79,16 @@ def create_services(users_data, base_home_path):
         services.append(service)
 
     return services
+
+def check_ports(users_data):
+    ports_userd = []
+    check_passed = True
+
+    for u in users_data:
+        port = u["ssh-port"]
+        if not port in ports_userd:
+            ports_userd.append(port)
+        else:
+            check_passed = False
+            raise PermissionError("the {PORT} port was requested by more than one user".format(PORT = port))
+    return check_passed
