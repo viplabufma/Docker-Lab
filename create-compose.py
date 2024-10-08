@@ -2,7 +2,7 @@ import os
 import json
 
 
-from utils import generate_docker_compose, create_services, load_users_data, create_and_check_path, write_docker_compose
+from utils import *
 
 from dotenv import load_dotenv
 
@@ -18,6 +18,9 @@ if __name__ == "__main__":
 
     # Check users permission in volume
     create_and_check_path(user_data, base_home_path)
+
+    # Checks if there is more than one port per environment
+    check_ports(user_data)
 
     # Create services of compose
     services = create_services(user_data, base_home_path)
