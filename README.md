@@ -57,13 +57,15 @@ As informações dos usuários e seus ambientes são definidas em um arquivo use
     "user": "usuario1",
     "password": "senhaSegura",
     "device_id": "0",
-    "env": "tensorflow"
+    "env": "tensorflow",
+    "ssh-port": 2020
   },
   {
     "user": "usuario2",
     "password": "outraSenhaSegura",
     "device_id": "1",
-    "env": "pytorch"
+    "env": "pytorch",
+    "ssh-port": 2021
   }
 ]
 ```

@@ -9,6 +9,8 @@ Adicione a chave GPG da NVIDIA e configure o repositório do NVIDIA Container To
 
 ```
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+```
+```
 curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 ```
 
@@ -41,7 +43,7 @@ sudo systemctl restart docker
 Para verificar se o Docker está configurado corretamente para usar GPUs, execute o seguinte comando:
 
 ```
-docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.4.1-cudnn-devel-ubuntu20.04 nvidia-smi
 ```
 
 Se tudo estiver configurado corretamente, você verá a saída do comando nvidia-smi, mostrando as GPUs disponíveis no sistema.
