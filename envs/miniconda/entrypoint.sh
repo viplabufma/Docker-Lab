@@ -40,7 +40,7 @@ else
     echo "Ambiente tensorflow instalado"
 
     $MINICONDA_DIR/bin/conda create -y -n pytorch python=3.11
-    $MINICONDA_DIR/bin/conda run -n tf pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+    $MINICONDA_DIR/bin/conda run -n pytorch pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
     echo "Ambiente pytorch instalado"
 
 fi
