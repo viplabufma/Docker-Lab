@@ -39,7 +39,7 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 Certifique-se de que os pacotes a serem instalados vêm do repositório Docker:
 
 ```
-apt-cache policy docker-ce
+sudo apt-cache policy docker-ce
 ```
 
 ## Passo 6: Instalar o Docker

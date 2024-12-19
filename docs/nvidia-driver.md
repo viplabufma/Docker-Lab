@@ -2,6 +2,13 @@
 
 Este guia descreve como instalar o driver NVIDIA versão 555 no Ubuntu, garantindo que o sistema possa utilizar GPUs NVIDIA de forma otimizada.
 
+⚠️ **Aviso Importante:**  
+Durante a instalação do driver NVIDIA, você pode enfrentar os seguintes problemas:  
+1. **Incompatibilidade de assinatura do driver com o Linux:** Isso pode impedir o driver de inicializar corretamente. Como solução, desative o *Secure Boot* no BIOS do sistema.  
+2. **Conflito com o driver de vídeo Nouveau:** O driver Nouveau pode causar conflitos durante a instalação do driver NVIDIA. Recomendamos ativar o `ssh-server` para gerenciar o sistema remotamente em caso de falhas na interface gráfica. Em seguida, remova o driver Nouveau e instale o driver desejado.
+
+---
+
 ## Passo 1: Verificar compatibilidade da GPU
 Antes de instalar o driver, verifique qual GPU está presente no sistema:
 
