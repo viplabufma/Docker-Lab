@@ -1,2 +1,7 @@
-**/data/
-users.json
+**/users.json
+
+__pycache__/
+
+.env
+
+docker-compose.yaml
