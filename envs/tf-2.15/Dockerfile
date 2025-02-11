@@ -1,5 +1,4 @@
-# Adiciona a imagem padrão
-FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu20.04
+FROM nvidia/cuda:11.2.2-runtime-ubuntu20.04
 
 # Configurar o ambiente para evitar prompts interativos
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,12 +23,24 @@ ENV LANGUAGE=en_US.UTF-8
 # Verificar se o locale foi configurado corretamente
 RUN locale
 
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/Miniconda3-latest-Linux-x86_64.sh  &&\
+    chmod +x /tmp/Miniconda3-latest-Linux-x86_64.sh &&\
+    /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda &&\
+    rm /tmp/Miniconda3-latest-Linux-x86_64.sh &&\
+    echo "Miniconda instalado com sucesso"
+
+ENV PATH="/opt/miniconda/bin:$PATH"
+
+RUN conda init
+RUN conda create -y -n tf python=3.10
+RUN CONDA_OVERRIDE_CUDA="12.2" conda install -y -n tf tensorflow-gpu==2.15 -c conda-forge
+
 # Expor a porta 22 para SSH
 EXPOSE 22
 
-# Copia o script de entrada
+# # Copia o script de entrada
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Define o script como ponto de entrada
+# # Define o script como ponto de entrada
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

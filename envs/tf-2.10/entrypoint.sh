@@ -40,11 +40,13 @@ chown -R "$USER_NAME":"$USER_NAME" /home/"$USER_NAME"
 
 # Inicializa o Conda
 echo "Initializing Conda..."
-/opt/conda/bin/conda init bash
+# /opt/miniconda/bin/conda init bash
+su - "$USER_NAME" -c '/opt/miniconda/bin/conda init bash'
 
 # Adicionar ao .profile para carregar o bashrc
 echo "Adding Conda initialization to .profile..."
-echo ". ~/.bashrc" >> ~/.profile
+echo 'eval "conda activate tf"' >> ~/.bashrc 
+echo ". /home/"$USER_NAME"/.bashrc" >> /home/"$USER_NAME"/.profile
 
 # Cria a pasta necessária para o SSH (caso não tenha sido criada anteriormente)
 echo "Ensuring /var/run/sshd exists..."

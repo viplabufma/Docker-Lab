@@ -4,13 +4,12 @@ services:''';
 
 compose_service = '''
   {USER}-{ENV}-gpu-{DEVICE_ID}:
-    build:
-      context: ./envs/{ENV}
-      dockerfile: Dockerfile
-      args:
-        USER_NAME: {USER}  # Passando o argumento USER_NAME
-        PASSWORD: {PASSWORD}  # Passando o argumento PASSWORD
     tty: true
+    image: dockerlab-{ENV}:latest    # Define a imagem que será usada para criar o container
+    container_name: {USER}-{ENV}-gpu-{DEVICE_ID} # Define o nome do container
+    environment:
+      USER_NAME: {USER}       # Nome do usuário
+      PASSWORD: {PASSWORD}  # Senha do usuário
     ports:
       - {PORT}:22
     volumes:
