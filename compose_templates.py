@@ -5,6 +5,8 @@ services:''';
 compose_service = '''
   {USER}-{ENV}-gpu-{DEVICE_ID}:
     tty: true
+    image: dockerlab-{ENV}:latest    # Define a imagem que será usada para criar o container
+    container_name: {USER}-{ENV}-gpu-{DEVICE_ID} # Define o nome do container
     environment:
       USER_NAME: {USER}       # Nome do usuário
       PASSWORD: {PASSWORD}  # Senha do usuário
