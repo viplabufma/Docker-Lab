@@ -1,6 +1,5 @@
 import os
 import json
-import docker
 
 from dotenv import load_dotenv
 from compose_templates import compose_header, compose_service
@@ -94,40 +93,10 @@ def check_ports(users_data):
             raise PermissionError("the {PORT} port was requested by more than one user".format(PORT = port))
     return check_passed
 
-def get_available_envs(path='./envs'):
-    return os.listdir(path=path) 
-
 def check_envs(users_data):
-    available_envs = get_available_envs()
+    available_envs = os.listdir(path='./envs') 
 
     for u in users_data:
         env = u["env"]
         if not env in available_envs:
             raise PermissionError("The \"{ENV}\" environment is not available in the ./envs path".format(ENV = env))
-
-
-def create_images(client, envs_path = './envs', force_build = True):
-    available_envs = get_available_envs()
-    current_imagens = client.images.list()
-    current_imagens = [x.tags for x in current_imagens]
-    current_imagens = [tag for sublist in current_imagens for tag in sublist]
-    
-
-    for env in available_envs:
-        image_name = "dockerlab-" + env + ":latest"
-        
-        if image_name in current_imagens and force_build == False:
-            continue
-
-        print("Criando imagem do ambiente:", env, "Nome:", image_name)
-        try:
-            image, build_logs = client.images.build(
-                path=os.path.join(envs_path, env),
-                tag= image_name,  # Tag para identificar a imagem
-                rm=True  # Remove os containers intermediários após a build
-            )
-
-        except docker.errors.BuildError as build_error:
-            print("Erro na construção da imagem:", build_error)
-        except Exception as e:
-            print("Erro inesperado:", e)
