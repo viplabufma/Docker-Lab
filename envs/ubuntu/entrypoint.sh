@@ -38,14 +38,6 @@ chown -R "$USER_NAME":"$USER_NAME" /etc/ssh
 echo "Setting ownership of home directory for $USER_NAME..."
 chown -R "$USER_NAME":"$USER_NAME" /home/"$USER_NAME"
 
-# Inicializa o Conda
-echo "Initializing Conda..."
-/opt/conda/bin/conda init bash
-
-# Adicionar ao .profile para carregar o bashrc
-echo "Adding Conda initialization to .profile..."
-echo ". ~/.bashrc" >> ~/.profile
-
 # Cria a pasta necessária para o SSH (caso não tenha sido criada anteriormente)
 echo "Ensuring /var/run/sshd exists..."
 mkdir -p /var/run/sshd
