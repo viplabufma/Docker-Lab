@@ -1,5 +1,5 @@
 # Adiciona a imagem padrão
-FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu20.04
 
 # Definir argumentos para o nome do usuário e senha
 ARG USER_NAME=myuser

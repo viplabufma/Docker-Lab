@@ -1,6 +1,6 @@
 import os
 import json
-import docker
+
 
 from utils import *
 
@@ -10,11 +10,6 @@ load_dotenv()
 
 
 if __name__ == "__main__":
-    client = docker.from_env()
-
-    # Create images based on the provided environment path and force-build option
-    create_images(client)
-
     # Get the base path for the home directory of the current user
     base_home_path = os.getenv('ENV_PATH', os.path.expanduser("~"))
 
