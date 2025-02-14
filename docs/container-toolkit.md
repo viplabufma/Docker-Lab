@@ -7,10 +7,10 @@ Este guia descreve como configurar o NVIDIA Container Toolkit, que permite que c
 
 Adicione a chave GPG da NVIDIA e configure o repositório do NVIDIA Container Toolkit:
 
-```
+```bash
 curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
 ```
-```
+```bash
 curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 ```
 
@@ -18,7 +18,7 @@ curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-contai
 
 Atualize a lista de pacotes para incluir o repositório NVIDIA:
 
-```
+```bash
 sudo apt-get update
 ```
 
@@ -26,7 +26,7 @@ sudo apt-get update
 
 Agora, instale o NVIDIA Container Toolkit:
 
-```
+```bash
 sudo apt-get install -y nvidia-container-toolkit
 ```
 
@@ -34,7 +34,7 @@ sudo apt-get install -y nvidia-container-toolkit
 
 Reinicie o serviço Docker para aplicar as mudanças:
 
-```
+```bash
 sudo systemctl restart docker
 ```
 
@@ -42,7 +42,7 @@ sudo systemctl restart docker
 
 Para verificar se o Docker está configurado corretamente para usar GPUs, execute o seguinte comando:
 
-```
+```bash
 docker run --rm --gpus all nvidia/cuda:12.4.1-cudnn-devel-ubuntu20.04 nvidia-smi
 ```
 

@@ -22,7 +22,7 @@ Isso exibirá informações sobre a GPU instalada. Certifique-se de que a GPU é
 
 Atualize o sistema para garantir que os pacotes estejam atualizados:
 
-```
+```bash
 sudo apt update
 sudo apt upgrade -y
 ```
@@ -31,7 +31,7 @@ sudo apt upgrade -y
 
 Adicione o repositório oficial de drivers gráficos da NVIDIA:
 
-```
+```bash
 sudo add-apt-repository ppa:graphics-drivers/ppa
 sudo apt update
 ```
@@ -40,7 +40,7 @@ sudo apt update
 
 Instale o driver NVIDIA 555 com o seguinte comando:
 
-```
+```bash
 sudo apt install nvidia-driver-555
 ```
 
@@ -50,13 +50,13 @@ Aguarde até que o processo de instalação seja concluído.
 
 Após a instalação, reinicie o sistema:
 
-```
+```bash
 sudo reboot
 ```
 
 Quando o sistema reiniciar, verifique se o driver está instalado corretamente executando o seguinte comando:
 
-```
+```bash
 nvidia-smi
 ```
 
@@ -65,7 +65,7 @@ Se o driver estiver instalado corretamente, será exibida uma lista com as GPUs 
 Passo 6: Instalar o NVIDIA CUDA Toolkit (Opcional)
 Se você deseja utilizar CUDA para aceleração GPU, pode instalar o toolkit correspondente:
 
-```
+```bash
 sudo apt install nvidia-cuda-toolkit
 ```
 

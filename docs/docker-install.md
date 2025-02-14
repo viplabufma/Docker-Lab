@@ -6,7 +6,7 @@ Este guia descreve o processo de instalação do Docker no Ubuntu, com a adiçã
 
 Antes de instalar o Docker, atualize a lista de pacotes:
 
-```
+```bash
 sudo apt update
 ```
 
@@ -14,7 +14,7 @@ sudo apt update
 
 Instale pacotes para que o APT possa usar HTTPS para a instalação do Docker:
 
-```
+```bash
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
 
@@ -22,7 +22,7 @@ sudo apt install apt-transport-https ca-certificates curl software-properties-co
 
 Baixe e adicione a chave GPG para o repositório oficial do Docker:
 
-```
+```bash
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
@@ -30,7 +30,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 Adicione o repositório oficial do Docker às fontes do APT:
 
-```
+```bash
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 ```
 
@@ -38,7 +38,7 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 
 Certifique-se de que os pacotes a serem instalados vêm do repositório Docker:
 
-```
+```bash
 sudo apt-cache policy docker-ce
 ```
 
@@ -46,7 +46,7 @@ sudo apt-cache policy docker-ce
 
 Agora, instale o Docker:
 
-```
+```bash
 sudo apt install docker-ce
 ```
 
@@ -54,7 +54,7 @@ sudo apt install docker-ce
 
 Após a instalação, verifique se o Docker está ativo e em execução:
 
-```
+```bash
 sudo systemctl status docker
 ```
 
@@ -62,19 +62,19 @@ sudo systemctl status docker
 
 Por padrão, o Docker exige o uso de sudo para executar seus comandos. Para evitar o uso contínuo de sudo, adicione seu usuário ao grupo docker:
 
-```
+```bash
 sudo usermod -aG docker ${USER}
 ```
 
 Aplique a mudança de grupo com o comando:
 
-```
+```bash
 su - ${USER}
 ```
 
 Verifique se o usuário foi adicionado corretamente ao grupo docker:
 
-```
+```bash
 groups
 ```
 
