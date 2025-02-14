@@ -30,7 +30,24 @@ Agora, instale o NVIDIA Container Toolkit:
 sudo apt-get install -y nvidia-container-toolkit
 ```
 
-## Passo 4: Reiniciar o Docker
+## Passo 4: Configurar o Docker para utilizar o runtime NVIDIA
+Adicione a seguinte configuração no arquivo /etc/docker/daemon.json para definir o runtime padrão como nvidia:
+
+```json
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+```
+
+> Nota: Caso o arquivo /etc/docker/daemon.json já exista e contenha outras configurações, integre a nova configuração, garantindo a validade da sintaxe JSON.
+
+## Passo 5: Reiniciar o Docker
 
 Reinicie o serviço Docker para aplicar as mudanças:
 
@@ -38,7 +55,7 @@ Reinicie o serviço Docker para aplicar as mudanças:
 sudo systemctl restart docker
 ```
 
-## Passo 5: Verificar a configuração da GPU
+## Passo 6: Verificar a configuração da GPU
 
 Para verificar se o Docker está configurado corretamente para usar GPUs, execute o seguinte comando:
 

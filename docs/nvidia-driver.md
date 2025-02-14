@@ -62,7 +62,7 @@ nvidia-smi
 
 Se o driver estiver instalado corretamente, será exibida uma lista com as GPUs detectadas e suas respectivas informações.
 
-Passo 6: Instalar o NVIDIA CUDA Toolkit (Opcional)
+## Passo 6: Instalar o NVIDIA CUDA Toolkit (Opcional)
 Se você deseja utilizar CUDA para aceleração GPU, pode instalar o toolkit correspondente:
 
 ```bash
