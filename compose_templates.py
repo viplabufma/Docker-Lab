@@ -1,6 +1,11 @@
-compose_header = '''version: '3.8'
+compose_header = '''
+version: '3.8'
 
-services:''';
+services:
+networks:
+  {NETWORK_NAME}:
+    driver: {NETWORK_DRIVER}
+''';
 
 compose_service = '''
   {USER}-{ENV}-gpu-{DEVICE_ID}:
@@ -15,6 +20,7 @@ compose_service = '''
     volumes:
       - {USER_HOME}:/home/{USER}
       - /backup:/backup
+      {CUSTOM_VOLUME}
     shm_size: {MEMORY_LIMIT}
     deploy:
       resources:

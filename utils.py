@@ -1,11 +1,20 @@
 import os
 import json
 import docker
+from typing import Dict, Any
 
 from dotenv import load_dotenv
 from compose_templates import compose_header, compose_service
 
 load_dotenv()
+
+NETWORK_DRIVER_HOST = "host"
+NETWORK_DRIVER_BRIDGE = "bridge"
+DEFAULT_MEMORY_LIMIT = "4g"
+DEFAULT_CPU_LIMIT = "6.0"
+DEFAULT_NETWORK_NAME = "default_network"
+SSH_DEFAULT_PORT = 22
+PORTS_SECTION_PATTERN = "    ports:\n      - {PORT}:22\n"
 
 def generate_docker_compose(services):
     docker_compose = compose_header + "".join(services)
@@ -32,22 +41,56 @@ def create_and_check_path(users_data, base_home_path):
     else:
         raise PermissionError("The user does not have permission on the chosen path")
 
+def remove_ports_section(service_template: str) -> str:
+    return service_template.replace(PORTS_SECTION_PATTERN, "")
 
-def create_service(service_param, base_home_path):
-    # Create the home directory for the user if it doesn't exist
+def adjust_template_for_network_driver(service_template: str, network_driver: str) -> str:
+    if network_driver == NETWORK_DRIVER_HOST:
+        return remove_ports_section(service_template)
+    return service_template
+
+def generate_sshd_config_content(ssh_port: int) -> str:
+    """Gera o conteúdo do arquivo sshd_config com a porta especificada."""
+    return f"""
+            Port {ssh_port}
+            PermitRootLogin no
+            PasswordAuthentication yes
+            ChallengeResponseAuthentication no
+            UsePAM yes
+            X11Forwarding yes
+            """.strip()
+
+def write_sshd_config_file(ssh_port: int) -> None:
+    config_content = generate_sshd_config_content(ssh_port)
+    with open("sshd_config", "w") as file:
+        file.write(config_content)
+
+def get_ssh_port(network_driver: str, user_port: int) -> int:
+    return user_port if network_driver == NETWORK_DRIVER_HOST else SSH_DEFAULT_PORT
+
+def create_service(service_param: Dict[str, Any], base_home_path: str) -> str:
+    """Cria e retorna a configuração de serviço para o Docker Compose."""
     user_home = get_user_path_home(service_param, base_home_path)
+    network_driver = os.getenv('NETWORK_DRIVER', NETWORK_DRIVER_BRIDGE)
     
+    ssh_port = get_ssh_port(network_driver, service_param['port'])
+    write_sshd_config_file(ssh_port)
+
+    # Formatação do template
     service = compose_service.format(
-                USER=service_param['user'],
-                DEVICE_ID=service_param['device_id'],
-                ENV=service_param['env'],
-                PASSWORD=service_param['password'],
-                PORT=service_param['port'],
-                USER_HOME=user_home,
-                MEMORY_LIMIT = os.getenv('MEMORY_LIMIT', '4g'),
-                CPU_LIMIT = os.getenv('CPU_LIMIT', '6.0'))
-    
-    return service
+        USER=service_param['user'],
+        DEVICE_ID=service_param['device_id'],
+        ENV=service_param['env'],
+        PASSWORD=service_param['password'],
+        PORT=service_param['port'],
+        USER_HOME=user_home,
+        MEMORY_LIMIT=os.getenv('MEMORY_LIMIT', DEFAULT_MEMORY_LIMIT),
+        CPU_LIMIT=os.getenv('CPU_LIMIT', DEFAULT_CPU_LIMIT),
+        NETWORK_NAME=os.getenv('NETWORK_NAME', DEFAULT_NETWORK_NAME),
+        NETWORK_DRIVER=network_driver,
+        CUSTOM_VOLUME='- ./sshd_config:/etc/ssh/sshd_config'
+    )
+    return adjust_template_for_network_driver(service, network_driver)
 
 def load_users_data(users_file_path = 'users.json'):
     # Load user data from users.json
@@ -55,7 +98,6 @@ def load_users_data(users_file_path = 'users.json'):
     with open(users_file_path, 'r') as f:
         user_data = json.load(f)
     return user_data
-
 
 def parse_service_params(user_info):
     return {
@@ -104,7 +146,6 @@ def check_envs(users_data):
         env = u["env"]
         if not env in available_envs:
             raise PermissionError("The \"{ENV}\" environment is not available in the ./envs path".format(ENV = env))
-
 
 def create_images(client, envs_path = './envs', force_build = True):
     available_envs = get_available_envs()
