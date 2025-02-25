@@ -2,9 +2,6 @@ compose_header = '''
 version: '3.8'
 
 services:
-networks:
-  {NETWORK_NAME}:
-    driver: {NETWORK_DRIVER}
 ''';
 
 compose_service = '''
@@ -20,7 +17,6 @@ compose_service = '''
     volumes:
       - {USER_HOME}:/home/{USER}
       - /backup:/backup
-      {CUSTOM_VOLUME}
     shm_size: {MEMORY_LIMIT}
     deploy:
       resources:
@@ -32,4 +28,5 @@ compose_service = '''
         limits:
           memory: {MEMORY_LIMIT}
           cpus: {CPU_LIMIT}  # Limite de CPU adicionado aqui
+    network_mode: {NETWORK_DRIVER}
 ''';
