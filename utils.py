@@ -2,7 +2,7 @@ import os
 import json
 import docker
 from typing import Dict, Any
-
+import re
 from dotenv import load_dotenv
 from compose_templates import compose_header, compose_service
 
@@ -14,7 +14,6 @@ DEFAULT_MEMORY_LIMIT = "4g"
 DEFAULT_CPU_LIMIT = "6.0"
 DEFAULT_NETWORK_NAME = "default_network"
 SSH_DEFAULT_PORT = 22
-PORTS_SECTION_PATTERN = "    ports:\n      - {PORT}:22\n"
 
 def generate_docker_compose(services):
     docker_compose = compose_header + "".join(services)
@@ -42,7 +41,10 @@ def create_and_check_path(users_data, base_home_path):
         raise PermissionError("The user does not have permission on the chosen path")
 
 def remove_ports_section(service_template: str) -> str:
-    return service_template.replace(PORTS_SECTION_PATTERN, "")
+    """Remove a seção de ports do template do Docker Compose."""
+    # Usa regex para encontrar a seção de portas, independentemente do valor da porta
+    ports_pattern = re.compile(r"    ports:\n      - \d+:\d+\n")
+    return ports_pattern.sub("", service_template)
 
 def adjust_template_for_network_driver(service_template: str, network_driver: str) -> str:
     if network_driver == NETWORK_DRIVER_HOST:
@@ -51,14 +53,13 @@ def adjust_template_for_network_driver(service_template: str, network_driver: st
 
 def generate_sshd_config_content(ssh_port: int) -> str:
     """Gera o conteúdo do arquivo sshd_config com a porta especificada."""
-    return f"""
-            Port {ssh_port}
-            PermitRootLogin no
-            PasswordAuthentication yes
-            ChallengeResponseAuthentication no
-            UsePAM yes
-            X11Forwarding yes
-            """.strip()
+    return f"""Port {ssh_port}
+PermitRootLogin no
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding yes
+""".strip()
 
 def write_sshd_config_file(ssh_port: int) -> None:
     config_content = generate_sshd_config_content(ssh_port)
