@@ -4,7 +4,7 @@ import docker
 from typing import Dict, Any
 import re
 from dotenv import load_dotenv
-from compose_templates import compose_header, compose_service
+from compose_templates import compose_header, build_compose_service_template
 
 load_dotenv()
 
@@ -39,37 +39,13 @@ def create_and_check_path(users_data, base_home_path):
     else:
         raise PermissionError("The user does not have permission on the chosen path")
 
-def remove_ports_section(service_template: str) -> str:
-    """Remove a seção de ports do template do Docker Compose."""
-    # Usa regex para encontrar a seção de portas, independentemente do valor da porta
-    ports_pattern = re.compile(r"    ports:\n      - \d+:\d+\n")
-    return ports_pattern.sub("", service_template)
-
-def adjust_template_for_network_driver(service_template: str, network_driver: str) -> str:
-    if network_driver == NETWORK_DRIVER_HOST:
-        return remove_ports_section(service_template)
-    return service_template
-
-def generate_sshd_config_content(ssh_port: int) -> str:
-    """Gera o conteúdo do arquivo sshd_config com a porta especificada."""
-    return f"""Port {ssh_port}""".strip()
-
-def write_sshd_config_file(ssh_port: int, user_home: str) -> None:
-    config_content = generate_sshd_config_content(ssh_port)
-    with open(os.path.join(user_home, "ssh_port"), "w") as file:
-        file.write(config_content)
-
-def get_ssh_port(network_driver: str, user_port: int) -> int:
-    return user_port if network_driver == NETWORK_DRIVER_HOST else SSH_DEFAULT_PORT
-
 def create_service(service_param: Dict[str, Any], base_home_path: str) -> str:
     """Cria e retorna a configuração de serviço para o Docker Compose."""
     user_home = get_user_path_home(service_param, base_home_path)
     network_driver = os.getenv('NETWORK_DRIVER', NETWORK_DRIVER_BRIDGE)
-    ssh_port = get_ssh_port(network_driver, service_param['port'])
-    write_sshd_config_file(ssh_port, user_home)
 
     # Formatação do template
+    compose_service = build_compose_service_template({"NETWORK_DRIVER": network_driver})
     service = compose_service.format(
         USER=service_param['user'],
         DEVICE_ID=service_param['device_id'],
@@ -81,7 +57,7 @@ def create_service(service_param: Dict[str, Any], base_home_path: str) -> str:
         CPU_LIMIT=os.getenv('CPU_LIMIT', DEFAULT_CPU_LIMIT),
         NETWORK_DRIVER=network_driver
     )
-    return adjust_template_for_network_driver(service, network_driver)
+    return service
 
 def load_users_data(users_file_path = 'users.json'):
     # Load user data from users.json
