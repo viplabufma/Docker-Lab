@@ -23,17 +23,25 @@ ENV LANGUAGE=en_US.UTF-8
 # Verificar se o locale foi configurado corretamente
 RUN locale
 
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/Miniconda3-latest-Linux-x86_64.sh  &&\
-    chmod +x /tmp/Miniconda3-latest-Linux-x86_64.sh &&\
-    /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda &&\
-    rm /tmp/Miniconda3-latest-Linux-x86_64.sh &&\
+# Definindo variáveis de URL e paths
+ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh
+ENV MINICONDA_SH=/tmp/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh
+ENV MINICONDA_INSTALL_PATH=/opt/conda
+
+# Baixando, instalando e removendo o Miniconda
+RUN wget $MINICONDA_URL -O $MINICONDA_SH && \
+    chmod +x $MINICONDA_SH && \
+    $MINICONDA_SH -b -p $MINICONDA_INSTALL_PATH && \
+    rm $MINICONDA_SH && \
     echo "Miniconda instalado com sucesso"
 
-ENV PATH="/opt/miniconda/bin:$PATH"
+
+ENV PATH="/opt/conda/bin:$PATH"
 
 RUN conda init
-RUN conda create -y -n tf python=3.10
-RUN CONDA_OVERRIDE_CUDA="11.2" conda install -y -n tf tensorflow-gpu==2.10 -c conda-forge
+RUN conda update conda
+RUN conda install -y python=3.8
+RUN CONDA_OVERRIDE_CUDA="11.2" conda install -y tensorflow-gpu==2.10 -c conda-forge
 
 # Expor a porta 22 para SSH
 EXPOSE 22
