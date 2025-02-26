@@ -4,30 +4,10 @@ set -e
 # Variáveis para o nome do usuário e senha
 USER_NAME=${USER_NAME:-defaultuser}
 PASSWORD=${PASSWORD:-defaultpassword}
+SSH_PORT=${SSH_PORT:-22}
 
 # =============================================
-# Leitura da porta do arquivo ssh_port
-# =============================================
-SSH_PORT_FILE="/home/$USER_NAME/ssh_port"
-DEFAULT_SSH_PORT=22
-
-get_ssh_port() {
-    if [ -f "$SSH_PORT_FILE" ]; then
-        grep -E "^Port [0-9]+$" "$SSH_PORT_FILE" | awk '{print $2}' || echo $DEFAULT_SSH_PORT
-    else
-        echo $DEFAULT_SSH_PORT
-    fi
-}
-
-# Obter porta do SSH
-SSH_PORT=$(get_ssh_port)
-echo "Configuring SSH to use port: $SSH_PORT"
-
-# Apagar o arquivo ssh_port após a leitura
-rm -f "$SSH_PORT_FILE"
-
-# =============================================
-# Configurar o diretório para SSH
+# Configuração do SSH
 # =============================================
 echo "Configuring SSH..."
 mkdir -p /var/run/sshd
