@@ -46,7 +46,9 @@ Altere o arquivo .env na raiz do projeto com as seguintes configurações:
 MEMORY_LIMIT=4g
 CPU_LIMIT=6.0
 ENV_PATH=/home/username/labenvs/
+NETWORK_DRIVER=bridge
 ```
+O NETWORK_DRIVER pode ser bridge, para rede interna virtual, e host para mesma rede que o host.
 
 Você pode ajustar o limite de memória de acordo com a capacidade do seu sistema, o *env path* é a pasta em que esta os dados das pastas de usuarios dos ambientes, separadas por nome de usuario.
 
