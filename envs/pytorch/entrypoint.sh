@@ -55,7 +55,7 @@ chown -R "$USER_NAME":"$USER_NAME" "/home/$USER_NAME"
 # Configuração do ambiente Conda
 # =============================================
 echo "Initializing Conda..."
-/opt/conda/bin/conda init bash
+su - "$USER_NAME" -c '/opt/conda/bin/conda init bash'
 echo ". ~/.bashrc" >> ~/.profile
 
 # =============================================
