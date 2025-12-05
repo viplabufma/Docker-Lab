@@ -1,11 +1,18 @@
 import os
 import json
 import docker
-
+from typing import Dict, Any
+import re
 from dotenv import load_dotenv
-from compose_templates import compose_header, compose_service
+from compose_templates import compose_header, build_compose_service_template
 
 load_dotenv()
+
+NETWORK_DRIVER_HOST = "host"
+NETWORK_DRIVER_BRIDGE = "bridge"
+DEFAULT_MEMORY_LIMIT = "4g"
+DEFAULT_CPU_LIMIT = "6.0"
+SSH_DEFAULT_PORT = 22
 
 def generate_docker_compose(services):
     docker_compose = compose_header + "".join(services)
@@ -32,21 +39,24 @@ def create_and_check_path(users_data, base_home_path):
     else:
         raise PermissionError("The user does not have permission on the chosen path")
 
-
-def create_service(service_param, base_home_path):
-    # Create the home directory for the user if it doesn't exist
+def create_service(service_param: Dict[str, Any], base_home_path: str) -> str:
+    """Cria e retorna a configuração de serviço para o Docker Compose."""
     user_home = get_user_path_home(service_param, base_home_path)
-    
+    network_driver = os.getenv('NETWORK_DRIVER', NETWORK_DRIVER_BRIDGE)
+
+    # Formatação do template
+    compose_service = build_compose_service_template({"NETWORK_DRIVER": network_driver})
     service = compose_service.format(
-                USER=service_param['user'],
-                DEVICE_ID=service_param['device_id'],
-                ENV=service_param['env'],
-                PASSWORD=service_param['password'],
-                PORT=service_param['port'],
-                USER_HOME=user_home,
-                MEMORY_LIMIT = os.getenv('MEMORY_LIMIT', '4g'),
-                CPU_LIMIT = os.getenv('CPU_LIMIT', '6.0'))
-    
+        USER=service_param['user'],
+        DEVICE_ID=service_param['device_id'],
+        ENV=service_param['env'],
+        PASSWORD=service_param['password'],
+        PORT=service_param['port'],
+        USER_HOME=user_home,
+        MEMORY_LIMIT=os.getenv('MEMORY_LIMIT', DEFAULT_MEMORY_LIMIT),
+        CPU_LIMIT=os.getenv('CPU_LIMIT', DEFAULT_CPU_LIMIT),
+        NETWORK_DRIVER=network_driver
+    )
     return service
 
 def load_users_data(users_file_path = 'users.json'):
@@ -55,7 +65,6 @@ def load_users_data(users_file_path = 'users.json'):
     with open(users_file_path, 'r') as f:
         user_data = json.load(f)
     return user_data
-
 
 def parse_service_params(user_info):
     return {
@@ -104,7 +113,6 @@ def check_envs(users_data):
         env = u["env"]
         if not env in available_envs:
             raise PermissionError("The \"{ENV}\" environment is not available in the ./envs path".format(ENV = env))
-
 
 def create_images(client, envs_path = './envs', force_build = True):
     available_envs = get_available_envs()

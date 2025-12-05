@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.2.2-runtime-ubuntu20.04
+FROM nvidia/cuda:12.5.1-cudnn-devel-ubuntu20.04
 
 # Configurar o ambiente para evitar prompts interativos
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,8 +24,8 @@ ENV LANGUAGE=en_US.UTF-8
 RUN locale
 
 # Definindo variáveis de URL e paths
-ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh
-ENV MINICONDA_SH=/tmp/Miniconda3-py38_23.11.0-1-Linux-x86_64.sh
+ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-py311_25.1.1-2-Linux-x86_64.sh
+ENV MINICONDA_SH=/tmp/Miniconda3-py311_25.1.1-2-Linux-x86_64.sh
 ENV MINICONDA_INSTALL_PATH=/opt/conda
 
 # Baixando, instalando e removendo o Miniconda
@@ -35,13 +35,12 @@ RUN wget $MINICONDA_URL -O $MINICONDA_SH && \
     rm $MINICONDA_SH && \
     echo "Miniconda instalado com sucesso"
 
-
 ENV PATH="/opt/conda/bin:$PATH"
 
 RUN conda init
 RUN conda update conda
-RUN conda install -y python=3.8
-RUN CONDA_OVERRIDE_CUDA="11.2" conda install -y tensorflow-gpu==2.10 -c conda-forge
+RUN conda install -y python=3.11
+RUN CONDA_OVERRIDE_CUDA="12.5" conda install -y tensorflow-gpu==2.18 -c conda-forge
 
 # Expor a porta 22 para SSH
 EXPOSE 22
