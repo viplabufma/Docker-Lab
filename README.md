@@ -47,8 +47,11 @@ MEMORY_LIMIT=4g
 CPU_LIMIT=6.0
 ENV_PATH=/home/username/labenvs/
 NETWORK_DRIVER=bridge
+PORTAINER_ACCESSCONTROL_TEAM=1 #opcional 
 ```
 O NETWORK_DRIVER pode ser bridge, para rede interna virtual, e host para mesma rede que o host.
+
+A variável PORTAINER_ACCESSCONTROL_TEAM é opcional e define o ID de um time no Portainer que terá controle sobre os recursos criados por este ambiente. Isso é útil quando uma mesma instância do Portainer é utilizada para gerenciar múltiplos hosts ou ambientes, permitindo restringir o acesso e a administração dos containers apenas ao time especificado. Caso não seja necessário utilizar controle de acesso por time, basta remover essa variável do arquivo .env.
 
 Você pode ajustar o limite de memória de acordo com a capacidade do seu sistema, o *env path* é a pasta em que esta os dados das pastas de usuarios dos ambientes, separadas por nome de usuario.
 
