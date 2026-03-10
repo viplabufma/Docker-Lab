@@ -11,6 +11,11 @@ compose_service_header = '''
     container_name: {USER}-{ENV}-gpu-{DEVICE_ID} # Define o nome do container
 '''
 
+compose_service_portainer_accesscontrol= '''
+    labels:
+      io.portainer.accesscontrol.teams: "{PORTAINER_ACCESSCONTROL_TEAM}" # Define o time de controle no portainer
+'''
+
 compose_service_env = '''
     environment:
       USER_NAME: {USER}       # Nome do usuário
@@ -53,6 +58,7 @@ compose_service_resources = '''
 def build_compose_service_template(dict):
     compose_service = ""
     compose_service = compose_service + compose_service_header
+    compose_service = compose_service + compose_service_portainer_accesscontrol if dict["PORTAINER_ACCESSCONTROL_TEAM"] else compose_service
     compose_service = compose_service + compose_service_env_host_net if dict['NETWORK_DRIVER'] == "host" else compose_service + compose_service_env
     compose_service = compose_service if dict['NETWORK_DRIVER'] == "host" else compose_service + compose_service_ports
     compose_service = compose_service + compose_service_volumes
