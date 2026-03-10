@@ -11,7 +11,9 @@ compose_service_header = '''
     container_name: {USER}-{ENV}-gpu-{DEVICE_ID} # Define o nome do container
 '''
 
-compose_service_portainer_accesscontrol= '''    io.portainer.accesscontrol.teams: "{PORTAINER_ACCESSCONTROL_TEAM}" # Define o time de controle no portainer
+compose_service_portainer_accesscontrol= '''
+    labels:
+      io.portainer.accesscontrol.teams: "{PORTAINER_ACCESSCONTROL_TEAM}" # Define o time de controle no portainer
 '''
 
 compose_service_env = '''
