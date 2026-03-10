@@ -43,9 +43,14 @@ def create_service(service_param: Dict[str, Any], base_home_path: str) -> str:
     """Cria e retorna a configuração de serviço para o Docker Compose."""
     user_home = get_user_path_home(service_param, base_home_path)
     network_driver = os.getenv('NETWORK_DRIVER', NETWORK_DRIVER_BRIDGE)
+    portainer_accesscontrol = os.getenv('PORTAINER_ACCESSCONTROL_TEAM', None)
+
 
     # Formatação do template
-    compose_service = build_compose_service_template({"NETWORK_DRIVER": network_driver})
+    compose_service = build_compose_service_template({
+        "NETWORK_DRIVER": network_driver,
+        "PORTAINER_ACCESSCONTROL_TEAM": portainer_accesscontrol
+    })
     service = compose_service.format(
         USER=service_param['user'],
         DEVICE_ID=service_param['device_id'],
@@ -55,7 +60,8 @@ def create_service(service_param: Dict[str, Any], base_home_path: str) -> str:
         USER_HOME=user_home,
         MEMORY_LIMIT=os.getenv('MEMORY_LIMIT', DEFAULT_MEMORY_LIMIT),
         CPU_LIMIT=os.getenv('CPU_LIMIT', DEFAULT_CPU_LIMIT),
-        NETWORK_DRIVER=network_driver
+        NETWORK_DRIVER=network_driver,
+        PORTAINER_ACCESSCONTROL_TEAM=portainer_accesscontrol
     )
     return service
 
